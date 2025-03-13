@@ -51,6 +51,28 @@ app.get("/reminders/completed", (context) => {
 });
 
 
+app.get('/reminders/incompleted', (context) => {
+  const incompletedReminders = reminders.filter((r) => r.isCompleted === false);
+  
+  if (incompletedReminders.length === 0) {
+    return context.json({ error: 'No incompleted reminders found' }, 404);
+  }
+  
+  return context.json(incompletedReminders);
+}
+);
+
+app.get("/reminders/due-today", (c) => {
+  const todayDateString = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+  const dueTodayReminders = reminders.filter(
+    (reminder) => reminder.dueDate >= todayDateString && reminder.isCompleted === false
+  );
+  if (dueTodayReminders.length === 0) {
+    return c.json({ message: "No reminders due today" });
+    }
+  return c.json(dueTodayReminders,200);
+});
+
 //by id
 app.get("/reminders/:id", (context) => {
   const id = context.req.param("id");
@@ -137,6 +159,7 @@ app.post("/reminders/:id/unmark-completed", (context) => {
   reminder.isCompleted = false;
   return context.json({ message: "Reminder unmarked as completed", reminder }, 200);
 });
+
 
 
 
