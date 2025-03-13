@@ -102,7 +102,17 @@ app.delete("/reminders/:id", (context) => {
   return context.json({ message: "Reminder deleted successfully" }, 200);
 });
 
+app.post("/reminders/:id/mark-completed", (context) => {
+  const id = context.req.param("id");
+  const reminder = reminders.find((r) => r.id === id);
 
+  if (!reminder) {
+    return context.json({ error: "Reminder not found" }, 404);
+  }
+
+  reminder.isCompleted = true;
+  return context.json({ message: "Reminder marked as completed", reminder }, 200);
+});
 
 serve(app);
 console.log("Server is running on http://localhost:3000");
