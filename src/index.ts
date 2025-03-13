@@ -24,6 +24,20 @@ app.post("/reminder", async (c) => {
     return c.json({ error: 'Invalid request' }, 400); // 400 Bad Request
   }
 })
+app.get('/reminder/:id', async (c) => {
+  const id = c.req.param('id');
+  const reminder = reminders.find(r => r.id === id);
+
+  if (reminder) {
+    return c.json(reminder, 200); // 200 OK
+  } else {
+    return c.json({ error: 'Reminder not found' }, 404); // 404 Not Found
+  }
+});
+
+
+
+
 
 serve(app);
 
