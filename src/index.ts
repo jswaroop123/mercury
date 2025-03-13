@@ -90,5 +90,19 @@ app.patch("/reminders/:id", async (context) => {
 });
 
 
+app.delete("/reminders/:id", (context) => {
+  const id = context.req.param("id");
+  const index = reminders.findIndex((r) => r.id === id);
+
+  if (index === -1) {
+    return context.json({ error: "Reminder not found" }, 404);
+  }
+
+  reminders.splice(index, 1);
+  return context.json({ message: "Reminder deleted successfully" }, 200);
+});
+
+
+
 serve(app);
 console.log("Server is running on http://localhost:3000");
